@@ -11,7 +11,7 @@ export default function Monitor() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://192.168.240.1:3000/api/solar-data');
+                const response = await fetch('http://172.21.166.163:3000/api/solar-data'); // 서버 주소 변경(자기 자신 IP로 변경)
                 const data = await response.json();
 
                 const sampledData = [];
