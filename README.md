@@ -1,3 +1,7 @@
+npm install  
+npm install yarn  
+yarn android  
+
 ## node.js로 api 서버 실행
 cd sensor-api
 
