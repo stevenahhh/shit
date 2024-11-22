@@ -3,17 +3,14 @@ import { View, Text, StyleSheet, Switch, ScrollView } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 export default function Control() {
-    // 각 모터의 상태를 관리하는 상태 변수
     const [motorSettings, setMotorSettings] = React.useState(
         Array(5).fill({ isOn: false, strength: 1 })
     );
 
-    // 각 전원의 상태를 관리하는 상태 변수 (각 전원에 두 개의 스위치 상태 포함)
     const [powerSettings, setPowerSettings] = React.useState(
         Array(2).fill({ isOn1: false, isOn2: false })
     );
 
-    // 모터의 켜기/끄기 스위치 상태를 변경하는 함수
     const toggleMotor = (index) => {
         setMotorSettings((prevSettings) => {
             const newSettings = [...prevSettings];
@@ -25,7 +22,6 @@ export default function Control() {
         });
     };
 
-    // 모터의 강도 슬라이더 상태를 변경하는 함수
     const setStrength = (index, value) => {
         setMotorSettings((prevSettings) => {
             const newSettings = [...prevSettings];
@@ -37,7 +33,6 @@ export default function Control() {
         });
     };
 
-    // 전원의 첫 번째 스위치 상태를 변경하는 함수
     const togglePower1 = (index) => {
         setPowerSettings((prevSettings) => {
             const newSettings = [...prevSettings];
@@ -49,7 +44,6 @@ export default function Control() {
         });
     };
 
-    // 전원의 두 번째 스위치 상태를 변경하는 함수
     const togglePower2 = (index) => {
         setPowerSettings((prevSettings) => {
             const newSettings = [...prevSettings];
@@ -68,18 +62,23 @@ export default function Control() {
                 <View key={index} style={styles.powerContainer}>
                     <Text style={styles.powerTitle}>전원 {index + 1}</Text>
                     <View style={styles.controlRow}>
-                        <Text style={styles.onOffText}>끄기</Text>
-                        <Switch
-                            value={power.isOn1}
-                            onValueChange={() => togglePower1(index)}
-                        />
-                        <Text style={styles.onOffText}>켜기</Text>
-                        <Switch
-                            value={power.isOn2}
-                            onValueChange={() => togglePower2(index)}
-                            style={styles.switchSpacing}
-                        />
-                        <Text style={styles.onOffText}>보조 전원</Text>
+                        <View style={styles.chipContainer}>
+                            <Text style={[styles.onOffText, power.isOn1 && styles.inactiveText]}>끄기</Text>
+                            <Switch
+                                value={power.isOn1}
+                                onValueChange={() => togglePower1(index)}
+                                style={styles.switchStyle}
+                            />
+                            <Text style={[styles.onOffText, !power.isOn1 && styles.inactiveText]}>켜기</Text>
+                        </View>
+                        <View style={styles.chipContainer}><Text style={styles.onOffText}>보조 전원</Text>
+                            <Switch
+                                value={power.isOn2}
+                                onValueChange={() => togglePower2(index)}
+                                style={{ marginLeft: 20 }}
+                            />
+                        </View>
+
                     </View>
                 </View>
             ))}
@@ -90,21 +89,26 @@ export default function Control() {
                     <Text style={styles.motorTitle}>모터 {index + 1}</Text>
                     <View style={styles.controls}>
                         <View style={styles.controlRow}>
-                            <Text style={styles.onOffText}>끄기</Text>
-                            <Switch
-                                value={motor.isOn}
-                                onValueChange={() => toggleMotor(index)}
-                            />
-                            <Text style={styles.onOffText}>켜기</Text>
-                            <Slider
-                                style={styles.slider}
-                                minimumValue={1}
-                                maximumValue={3}
-                                step={1}
-                                value={motor.strength}
-                                onValueChange={(value) => setStrength(index, value)}
-                            />
-                            <Text style={styles.strengthText}>{motor.strength}단계</Text>
+                            <View style={styles.chipContainer}>
+                                <Text style={[styles.onOffText, motor.isOn && styles.inactiveText]}>끄기</Text>
+                                <Switch
+                                    value={motor.isOn}
+                                    onValueChange={() => toggleMotor(index)}
+                                    style={styles.switchStyle}
+                                />
+                                <Text style={[styles.onOffText, !motor.isOn && styles.inactiveText]}>켜기</Text>
+                            </View>
+                            <View style={styles.chipContainer}>
+                                <Slider
+                                    style={styles.slider}
+                                    minimumValue={1}
+                                    maximumValue={3}
+                                    step={1}
+                                    value={motor.strength}
+                                    onValueChange={(value) => setStrength(index, value)}
+                                />
+                                <Text style={styles.strengthText}>{motor.strength}단계</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -161,16 +165,32 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
     },
+    chipContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f0f0f0',
+        paddingVertical: 5,
+        paddingHorizontal: 15,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#ddd', // 테두리 색상 설정
+    },
     onOffText: {
         fontSize: 16,
     },
-    switchSpacing: {
-        marginHorizontal: 15,
+    inactiveText: {
+        color: '#777',
+    },
+    activeText: {
+        color: '#000',
+    },
+    switchStyle: {
+        marginHorizontal: 8,
     },
     slider: {
-        width: 150,
+        width: 100,
         height: 40,
-        marginHorizontal: 10,
+        // marginHorizontal: 10,
     },
     strengthText: {
         fontSize: 16,

@@ -8,31 +8,31 @@ export default function Monitor() {
     const [labels, setLabels] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://172.21.166.163:3000/api/solar-data'); // 서버 주소 변경(자기 자신 IP로 변경)
-                const data = await response.json();
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch('http://172.21.166.163:3000/api/solar-data'); // 서버 주소 변경(자기 자신 IP로 변경)
+    //             const data = await response.json();
 
-                const sampledData = [];
-                const sampledLabels = [];
-                data.forEach((item, index) => {
-                    if (index % 365 === 0) {
-                        sampledData.push(parseFloat(item.E_DATA3));
-                        sampledLabels.push(item.REG_DATE.split('T')[0]);
-                    }
-                });
+    //             const sampledData = [];
+    //             const sampledLabels = [];
+    //             data.forEach((item, index) => {
+    //                 if (index % 365 === 0) {
+    //                     sampledData.push(parseFloat(item.E_DATA3));
+    //                     sampledLabels.push(item.REG_DATE.split('T')[0]);
+    //                 }
+    //             });
 
-                setSolarData(sampledData);
-                setLabels(sampledLabels);
-            } catch (error) {
-                console.error('Error fetching solar data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
+    //             setSolarData(sampledData);
+    //             setLabels(sampledLabels);
+    //         } catch (error) {
+    //             console.error('Error fetching solar data:', error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
 
     if (loading) {
         return (
